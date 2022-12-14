@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-      DOCKER_TAG = dockerTag()
+      DOCKER_TAG = getDockerTag()
   }
   stages {
      stage("Build Docker Image"){
@@ -11,7 +11,7 @@ pipeline {
      }
   }
 }
-def dockerTag() {
-    def tag() = sh script: 'git rev-parse HEAD' returnStdout: true
+def getDockerTag(){
+    def tag() = sh script: 'git rev-parse HEAD', returnStdout: true
     return tag
 }
