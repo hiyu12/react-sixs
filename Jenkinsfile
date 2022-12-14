@@ -23,10 +23,12 @@ pipeline {
                 sh "./changeversion.sh ${DOCKER_TAG}"
                 sshagent(['sshk8s']) {
                     sh "scp -o strictHostKeyChecking=no node-app.yaml hiyu@35.200.238.205:/home/hiyu/"
-                    try { 
+                    script {
+                        try { 
                         sh "ssh hiyu@35.200.238.205 kubectl apply -f ."
-                    } catch(error){
-                        sh " ssh hiyu@35.200.238.205 kubectl create -f ."
+                        } catch(error){
+                            sh " ssh hiyu@35.200.238.205 kubectl create -f ."
+                        }
                     }
                 }
             }
