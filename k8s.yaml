@@ -8,10 +8,6 @@ spec:
   containers:
   - name: nodeapp
     image: akash5791/nodeapp:tagVersion
-    resources:
-      limits:
-        memory: "128Mi"
-        cpu: "500m"
     ports:
       - containerPort: 3000
 
