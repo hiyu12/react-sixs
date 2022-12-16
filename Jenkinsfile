@@ -36,7 +36,9 @@ pipeline {
     }
     post{
         always {
-            sh 'docker rmi -f ${docker images -q}'
+            steps {
+               sh 'docker rmi -f ${docker images -q}'
+            }
         }
     }
 }
