@@ -11,7 +11,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <h1 style={{ color: "blue" }}>Graph Ql Demo </h1>
+        <h1 style={{ color: "black" }}>Graph Ql Demo </h1>
         {/* <Home /> */}
         <Mutation />
       </div>
