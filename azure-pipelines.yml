@@ -60,26 +60,26 @@ stages:
       #     customCommand: 'run build'
       #   displayName: "Build Created"
 
-    - deployment: Linux_Dep
-      dependsOn: Build_Npm
-      environment: test
-      pool: default
-        - Agent.Name -equals $(test-env)
-      condition: always()
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - task: ExtractFiles@1
-                inputs:
-                  archiveFilePatterns: '**/*.zip'
-                  destinationFolder: '.'
-                  cleanDestinationFolder: true
-                  overwriteExistingFiles: true
-              - task: NodeTool@0
-                inputs:
-                  versionSource: 'spec'
-                  versionSpec: '14.x'
-                  checkLatest: true
-              - script: npm run start
-                displayName: Server Start
+    # - deployment: Linux_Dep
+    #   dependsOn: Build_Npm
+    #   environment: test
+    #   pool: default
+    #     - Agent.Name -equals $(test-env)
+    #   condition: always()
+    #   strategy:
+    #     runOnce:
+    #       deploy:
+    #         steps:
+    #           - task: ExtractFiles@1
+    #             inputs:
+    #               archiveFilePatterns: '**/*.zip'
+    #               destinationFolder: '.'
+    #               cleanDestinationFolder: true
+    #               overwriteExistingFiles: true
+    #           - task: NodeTool@0
+    #             inputs:
+    #               versionSource: 'spec'
+    #               versionSpec: '14.x'
+    #               checkLatest: true
+    #           - script: npm run start
+    #             displayName: Server Start
