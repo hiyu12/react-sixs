@@ -9,7 +9,6 @@ trigger:
 pool:
   name: default
   demands:
-  - Agent.OS -equals Linux
   - Agent.Name -equals ip-172-31-14-139
 
 stages:
@@ -17,6 +16,11 @@ stages:
     jobs:
     - job: Build_Npm
       steps: 
+      - task: NodeTool@0
+        inputs:
+          versionSource: 'spec'
+          versionSpec: '14.x'
+          checkLatest: true
       - task: Npm@1
         inputs:
           command: 'install'
