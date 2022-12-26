@@ -21,6 +21,7 @@ stages:
       - task: DownloadSecureFile@1
         inputs:
           secureFile: 'myapp.config'
+        displayName: Download Nginx Config file
       - task: NodeTool@0
         inputs:
           versionSource: 'spec'
@@ -31,6 +32,28 @@ stages:
           command: 'install'
         displayName: "Install Dependency"
       
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      - task: ArchiveFiles@2
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/full-code.zip'
+          replaceExistingArchive: true
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(Build.ArtifactStagingDirectory)'
+          Contents: '**.zip'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/artifacts'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
+          ArtifactName: 'drop'
+      
       # - task: Npm@1
       #   inputs:
       #     command: 'custom'
@@ -39,26 +62,22 @@ stages:
 
     - deployment: Linux_Dep
       dependsOn: Build_Npm
-      environment: env
+      environment: dev
       condition: failed()
       strategy:
         runOnce:
           deploy:
             steps:
-              - task: DownloadSecureFile@1
+              - task: ExtractFiles@1
                 inputs:
-                  secureFile: 'myapp.config'
-                displayName: "Configuration file Downloaded"
-              # - script: npm run start
-              #   displayName: "start server"
-              - script: |
-                  # ls -l
-                  # sudo apt install nginx -y && systemctl start nginx
-                  # sudo unlink /etc/nginx/sites-enabled/default
-                  # sudo cp myapp.config /etc/nginx/sites-enabled/
-                  # sudo nginx -t
-                  # sudo systemctl restart nginx
-                  sudo apt install docker.io -y && systemctl start docker
-                  sudo docker build -t $(docker_image):$(Build.BuildId) .
-                  sudo docker run -d -p 3000:3000 $(docker_image):$(Build.BuildId) --name $(docker_cont)
-                displayName: "Docker Deploy"
+                  archiveFilePatterns: '**/*.zip'
+                  destinationFolder: '.'
+                  cleanDestinationFolder: true
+                  overwriteExistingFiles: true
+              - task: NodeTool@0
+                inputs:
+                  versionSource: 'spec'
+                  versionSpec: '14.x'
+                  checkLatest: true
+              - script: npm run start
+                displayName: Server Start
