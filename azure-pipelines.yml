@@ -38,6 +38,9 @@ stages:
         runOnce:
           deploy:
             steps:
+              - task: DockerInstaller@0
+                inputs:
+                  dockerVersion: '17.09.0-ce'
               - script: |
                   docker build -t akash5791/nodeey .
                 displayName: "Docker Deploy"
