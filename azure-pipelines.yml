@@ -27,11 +27,11 @@ stages:
         inputs:
           command: 'install'
         displayName: "Install Dependency"
-      - task: Npm@1
-        inputs:
-          command: 'custom'
-          customCommand: 'run build'
-        displayName: "Build Created"
+      # - task: Npm@1
+      #   inputs:
+      #     command: 'custom'
+      #     customCommand: 'run build'
+      #   displayName: "Build Created"
 
     - deployment: Linux_Dep
       dependsOn: Build_Npm
