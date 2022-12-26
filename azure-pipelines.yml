@@ -18,6 +18,10 @@ stages:
     jobs:
     - job: Build_Npm
       steps: 
+      - task: DownloadSecureFile@1
+        inputs:
+          secureFile: 'myapp.config'
+        displayName: "Configuration file Downloaded"
       - task: NodeTool@0
         inputs:
           versionSource: 'spec'
@@ -27,6 +31,7 @@ stages:
         inputs:
           command: 'install'
         displayName: "Install Dependency"
+      
       # - task: Npm@1
       #   inputs:
       #     command: 'custom'
@@ -36,6 +41,7 @@ stages:
     - deployment: Linux_Dep
       dependsOn: Build_Npm
       environment: env
+      condition: succeeded()
       strategy:
         runOnce:
           deploy:
