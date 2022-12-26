@@ -10,7 +10,7 @@ pool:
   name: default
   demands:
   - Agent.OS -equals Linux
-  - npm
+  - Agent.Name -equals ip-172-31-14-139
 
 stages:
   - stage:
