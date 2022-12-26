@@ -62,8 +62,10 @@ stages:
 
     - deployment: Linux_Dep
       dependsOn: Build_Npm
-      environment: dev
-      condition: failed()
+      environment: test
+      pool: default
+        - Agent.Name -equals $(test-env)
+      condition: always()
       strategy:
         runOnce:
           deploy:
