@@ -9,7 +9,7 @@ trigger:
 pool:
   name: default
   demands:
-  - Agent.Name -equals ip-172-31-14-139
+  - Agent.Name -equals Dep-server
 variables:
 - group: var-group
 
@@ -40,8 +40,19 @@ stages:
         runOnce:
           deploy:
             steps:
+              - task: DownloadSecureFile@1
+                inputs:
+                  secureFile: 'myapp.config'
+                displayName: "Configuration file Downloaded"
+              - script: npm run start
+                displayName: "start server"
               - script: |
-                  npm run start
+                  ls -l
+                  sudo apt install nginx -y && systemctl start nginx
+                  sudo unlink /etc/nginx/sites-enabled/default
+                  sudo cp myapp.config /etc/nginx/sites-enabled/
+                  sudo nginx -t
+                  sudo systemctl restart nginx
                   # sudo apt install docker.io -y && systemctl start docker
                   # sudo docker build -t $(docker_image):$(Build.BuildId) .
                   # sudo docker run -d -p 3000:3000 $(docker_image):$(Build.BuildId) --name $(docker_cont)
