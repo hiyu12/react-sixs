@@ -1,0 +1,39 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  name: default
+  demands:
+  - Agent.OS -equals Linux
+  - Agent.Name -equals ip-172-31-14-139
+
+stages:
+  - stage:
+    jobs:
+    - job: Build_Npm
+      steps: 
+      - task: Npm@1
+        inputs:
+          command: 'install'
+        displayName: "Install Dependency"
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          customCommand: 'run build'
+        displayName: "Build Created"
+
+    - deployment: Linux_Dep
+      dependsOn: Build_Npm
+      environment: env
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - script: |
+                  docker build -t akash5791/nodeey .
+                displayName: "Docker Deploy"
