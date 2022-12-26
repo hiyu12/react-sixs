@@ -21,7 +21,6 @@ stages:
       - task: DownloadSecureFile@1
         inputs:
           secureFile: 'myapp.config'
-        displayName: "Configuration file Downloaded"
       - task: NodeTool@0
         inputs:
           versionSource: 'spec'
@@ -41,7 +40,7 @@ stages:
     - deployment: Linux_Dep
       dependsOn: Build_Npm
       environment: env
-      condition: succeeded()
+      condition: failed()
       strategy:
         runOnce:
           deploy:
