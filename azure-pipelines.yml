@@ -10,6 +10,8 @@ pool:
   name: default
   demands:
   - Agent.Name -equals ip-172-31-14-139
+variables:
+- group: var-group
 
 stages:
   - stage:
@@ -40,6 +42,6 @@ stages:
             steps:
               - script: |
                   sudo apt install docker.io -y && systemctl start docker
-                  sudo docker build -t akash5791/nodeey:$(Build.BuildId) .
-                  sudo docker run -d -p 3000:3000 akash5791/nodeey:$(Build.BuildId) --name nodecont
+                  sudo docker build -t $(docker_image):$(Build.BuildId) .
+                  sudo docker run -d -p 3000:3000 $(docker_image):$(Build.BuildId) --name $(docker_cont)
                 displayName: "Docker Deploy"
