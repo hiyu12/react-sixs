@@ -42,5 +42,6 @@ stages:
                 inputs:
                   dockerVersion: '17.09.0-ce'
               - script: |
-                  docker build -t akash5791/nodeey .
+                  sudo systemctl start docker
+                  sudo docker build -t akash5791/nodeey .
                 displayName: "Docker Deploy"
