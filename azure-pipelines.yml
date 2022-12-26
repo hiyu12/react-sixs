@@ -41,7 +41,8 @@ stages:
           deploy:
             steps:
               - script: |
-                  sudo apt install docker.io -y && systemctl start docker
-                  sudo docker build -t $(docker_image):$(Build.BuildId) .
-                  sudo docker run -d -p 3000:3000 $(docker_image):$(Build.BuildId) --name $(docker_cont)
+                  npm run start
+                  # sudo apt install docker.io -y && systemctl start docker
+                  # sudo docker build -t $(docker_image):$(Build.BuildId) .
+                  # sudo docker run -d -p 3000:3000 $(docker_image):$(Build.BuildId) --name $(docker_cont)
                 displayName: "Docker Deploy"
