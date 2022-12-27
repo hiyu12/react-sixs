@@ -6,6 +6,12 @@
 trigger:
 - feature
 
+schedules:
+  - cron: 0 * * * *
+    displayName: "Trigger every hour"
+    branches:
+      include:
+        - feature
 pool:
   name: default
   demands:
